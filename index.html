@@ -2,103 +2,128 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta
-  name="description"
-  content="Official documentation for SubReaper, an open-source subdomain takeover, origin IP discovery, and DNS vulnerability scanner.">
-  <title>SubReaper Documentation | Subdomain Takeover & DNS Vulnerability Scanner</title>
+  <title>SubReaper – Bug Bounty & Pentest Tool | Subdomain Takeover + DNS Scanner</title>
+  <meta name="description"
+        content="Open‑source subdomain takeover, origin IP discovery, and DNS vulnerability scanner. Perfect for bug bounty hunters and penetration testers.">
+  <meta name="keywords"
+        content="bug bounty tool, tools pentest website, subdomain takeover scanner, DNS vulnerability scanner, origin IP finder, SubReaper">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://subreaper.my.id/">
+  <meta name="theme-color" content="#0c1118">
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
   <link rel="shortcut icon" href="/favicon.ico">
-  <meta name="description"
-        content="Official documentation for SubReaper, a subdomain takeover and DNS vulnerability scanner.">
 
-  <meta name="theme-color" content="#0c1118">
-  <meta property="og:title" content="SubReaper Documentation">
+  <meta property="og:title" content="SubReaper – Bug Bounty & Pentest Tool">
   <meta property="og:description"
-      content="Subdomain Takeover & DNS Vulnerability Scanner">
+        content="Subdomain takeover, origin IP discovery, and DNS vulnerability scanner for security professionals.">
   <meta property="og:type" content="website">
-  <link rel="stylesheet" href="style.css">
+  <meta property="og:url" content="https://subreaper.my.id/">
+  <meta property="og:image" content="https://subreaper.my.id/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
 
-  <!-- Inter font -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SubReaper – Bug Bounty & Pentest Tool">
+  <meta name="twitter:description"
+        content="Subdomain takeover, origin IP discovery, and DNS vulnerability scanner.">
+  <meta name="twitter:image" content="https://subreaper.my.id/og-image.jpg">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "SubReaper",
+    "description": "Open-source subdomain takeover, origin IP discovery, and DNS vulnerability scanner for bug bounty and pentesting.",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Linux, Windows, macOS",
+    "url": "https://subreaper.my.id",
+    "version": "1.1.2",
+    "author": {
+      "@type": "Person",
+      "name": "Rendi Dwi S."
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    }
+  }
+  </script>
+
+  <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
   <div class="layout">
 
-    <!-- Sidebar -->
-    <aside class="sidebar">
+    <!-- Tombol buka sidebar kiri (hamburger) -->
+    <button class="sidebar-open-btn" id="sidebarOpenBtn" aria-label="Open sidebar">
+      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 5h14M3 10h14M3 15h14"/>
+      </svg>
+    </button>
+
+    <!-- Sidebar Kiri (Navigasi Utama) -->
+    <aside class="sidebar sidebar-left" id="sidebar">
       <div class="sidebar-header">
         <span class="logo">SubReaper</span>
+        <button class="sidebar-close-btn" id="sidebarCloseBtn" aria-label="Close sidebar">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4l10 10M14 4L4 14"/>
+          </svg>
+        </button>
         <span class="version">v1.1.2</span>
       </div>
 
       <nav class="nav">
-        <a href="#welcome" data-page="welcome" class="nav-link active">
-          Welcome
-        </a>
-
-        <a href="#installation" data-page="installation" class="nav-link">
-          Installation
-        </a>
-
-        <a href="#usage" data-page="usage" class="nav-link">
-          Usage
-        </a>
-
-        <a href="#features" data-page="features" class="nav-link">
-          Features
-        </a>
+        <a href="#welcome" data-page="welcome" class="nav-link active">Welcome</a>
+        <a href="#installation" data-page="installation" class="nav-link">Installation</a>
+        <a href="#usage" data-page="usage" class="nav-link">Usage</a>
+        <a href="#features" data-page="features" class="nav-link">Features</a>
       </nav>
 
-    <div class="sidebar-footer">
-    <a
-        href="https://github.com/rendidwisa/subreaper"
-        target="_blank"
-        rel="noopener noreferrer"
-        class="github-link"
-    >
-        <svg
-        class="github-icon"
-        viewBox="0 0 16 16"
-        aria-hidden="true"
-        >
-        <path fill="currentColor"
-            d="M8 0C3.58 0 0 3.58 0 8a8.01 8.01 0 0 0 5.47 7.59c.4.07.55-.17.55-.38
-            0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13
-            -.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66
-            .07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95
-            0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12
-            0 0 .67-.21 2.2.82a7.5 7.5 0 0 1 4 0c1.53-1.04 2.2-.82
-            2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15
-            0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48
-            0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8
-            c0-4.42-3.58-8-8-8Z"/>
-        </svg>
-
-        <span>GitHub Repository</span>
-    </a>
-    </div>
+      <div class="sidebar-footer">
+        <a href="https://github.com/rendidwisa/subreaper"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="github-link">
+          <svg class="github-icon" viewBox="0 0 16 16" aria-hidden="true">
+            <path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8a8.01 8.01 0 0 0 5.47 7.59c.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.5-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82a7.5 7.5 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/>
+          </svg>
+          <span>GitHub Repository</span>
+        </a>
+      </div>
     </aside>
 
-    <!-- Main Content -->
-    <main
-      id="content"
-      class="content"
-      aria-live="polite"
-    >
-      <div class="loading">Loading…</div>
+    <!-- Overlay untuk mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Konten Utama -->
+    <main id="content" class="content" aria-live="polite">
+      <h1>SubReaper – Bug Bounty &amp; Pentest Tool</h1>
+      <p>
+        <strong>Subdomain takeover, origin IP discovery, and DNS vulnerability scanner.</strong>
+        Ideal for bug bounty hunters and penetration testers.
+      </p>
     </main>
+
+    <!-- Sidebar Kanan (Table of Contents) -->
+    <aside class="sidebar sidebar-right" id="tocSidebar">
+      <div class="toc-header">On This Page</div>
+      <nav id="tocNav" class="toc-nav">
+        <!-- Diisi oleh JavaScript -->
+      </nav>
+    </aside>
   </div>
-    <footer class="footer">
+
+  <footer class="footer">
     <p>Maintained by the SubReaper Project</p>
-    </footer>
+  </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="script.js"></script>
-
 </body>
 </html>

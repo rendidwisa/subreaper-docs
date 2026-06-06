@@ -1,63 +1,177 @@
+// ==========================================
+// 1. Sidebar kiri toggle
+// ==========================================
+const layout = document.querySelector('.layout');
+const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+const sidebarOpenBtn = document.getElementById('sidebarOpenBtn');
+const overlay = document.getElementById('sidebarOverlay');
+
+const savedState = localStorage.getItem('sidebar-closed');
+if (savedState === 'true') {
+  layout.classList.add('sidebar-closed');
+} else {
+  layout.classList.remove('sidebar-closed');
+}
+
+function handleMobileOverlay() {
+  if (window.innerWidth <= 768) {
+    if (!layout.classList.contains('sidebar-closed')) {
+      overlay.classList.add('active');
+    } else {
+      overlay.classList.remove('active');
+    }
+  } else {
+    overlay.classList.remove('active');
+  }
+}
+
+sidebarCloseBtn.addEventListener('click', () => {
+  layout.classList.add('sidebar-closed');
+  localStorage.setItem('sidebar-closed', 'true');
+  handleMobileOverlay();
+});
+
+sidebarOpenBtn.addEventListener('click', () => {
+  layout.classList.remove('sidebar-closed');
+  localStorage.setItem('sidebar-closed', 'false');
+  handleMobileOverlay();
+});
+
+overlay.addEventListener('click', () => {
+  layout.classList.add('sidebar-closed');
+  localStorage.setItem('sidebar-closed', 'true');
+  handleMobileOverlay();
+});
+
+window.addEventListener('resize', handleMobileOverlay);
+const observer = new MutationObserver(handleMobileOverlay);
+observer.observe(layout, { attributes: true, attributeFilter: ['class'] });
+handleMobileOverlay();
+
+// ==========================================
+// 2. Load halaman & bangun Table of Contents
+// ==========================================
+function buildTableOfContents() {
+  const contentDiv = document.getElementById('content');
+  const tocNav = document.getElementById('tocNav');
+  if (!tocNav) return;
+
+  // Ambil semua heading h2 dan h3 di konten
+  const headings = contentDiv.querySelectorAll('h2, h3');
+  tocNav.innerHTML = '';
+
+  if (headings.length === 0) {
+    tocNav.innerHTML = '<span style="color:#484f58;font-size:0.8rem;">No headings</span>';
+    return;
+  }
+
+  headings.forEach((heading, index) => {
+    // Buat ID unik jika belum ada
+    if (!heading.id) {
+      heading.id = `heading-${index}-${Math.random().toString(36).substr(2, 5)}`;
+    }
+
+    const link = document.createElement('a');
+    link.href = `#${heading.id}`;
+    link.textContent = heading.textContent;
+    link.classList.add(heading.tagName.toLowerCase() === 'h3' ? 'toc-h3' : 'toc-h2');
+
+    // Scroll halus saat diklik
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      document.querySelector(link.getAttribute('href'))?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+      // Update active state
+      document.querySelectorAll('.toc-nav a').forEach(a => a.classList.remove('active'));
+      link.classList.add('active');
+    });
+
+    tocNav.appendChild(link);
+  });
+
+  // Intersection Observer untuk menyorot link yang sedang terlihat
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      const id = entry.target.id;
+      const link = tocNav.querySelector(`a[href="#${id}"]`);
+      if (entry.isIntersecting) {
+        document.querySelectorAll('.toc-nav a').forEach(a => a.classList.remove('active'));
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-80px 0px -80% 0px' });
+
+  headings.forEach(h => observer.observe(h));
+}
+
 async function loadPage(page) {
   const contentDiv = document.getElementById('content');
   contentDiv.innerHTML = '<div class="loading">Loading…</div>';
- 
+
   try {
     const response = await fetch(`content/${page}.md`);
     if (!response.ok) throw new Error('Page not found');
     const markdown = await response.text();
     contentDiv.innerHTML = marked.parse(markdown);
     addCopyButtons();
-    // Highlight active link
+
+    // Highlight navigasi kiri
     document.querySelectorAll('.nav-link').forEach(link => {
       link.classList.remove('active');
       if (link.dataset.page === page) link.classList.add('active');
     });
 
-    // Update URL hash tanpa reload
+    // Update hash
     window.location.hash = page;
+
+    // Bangun ToC di sidebar kanan
+    buildTableOfContents();
   } catch (err) {
     contentDiv.innerHTML = '<h1>404</h1><p>Page not found.</p>';
+    // Kosongkan ToC
+    const tocNav = document.getElementById('tocNav');
+    if (tocNav) tocNav.innerHTML = '';
   }
 }
 
 function addCopyButtons() {
   document.querySelectorAll('pre').forEach(pre => {
     if (pre.querySelector('.copy-btn')) return;
-
     const button = document.createElement('button');
     button.className = 'copy-btn';
     button.textContent = 'Copy';
-
     button.addEventListener('click', async () => {
       const code = pre.querySelector('code')?.innerText || '';
-
       try {
         await navigator.clipboard.writeText(code);
-
         button.textContent = 'Copied!';
-        setTimeout(() => {
-          button.textContent = 'Copy';
-        }, 1500);
+        setTimeout(() => button.textContent = 'Copy', 1500);
       } catch {
         button.textContent = 'Failed';
       }
     });
-
     pre.style.position = 'relative';
     pre.appendChild(button);
   });
 }
 
-// Inisialisasi: load halaman sesuai hash atau default 'welcome'
+// Inisialisasi halaman
 const initialPage = window.location.hash.slice(1) || 'welcome';
 loadPage(initialPage);
 
-// Delegasi event untuk navigasi
+// Navigasi kiri
 document.querySelector('.nav').addEventListener('click', (e) => {
   e.preventDefault();
   const link = e.target.closest('.nav-link');
   if (!link) return;
   const page = link.dataset.page;
   loadPage(page);
+
+  if (window.innerWidth <= 768) {
+    layout.classList.add('sidebar-closed');
+    localStorage.setItem('sidebar-closed', 'true');
+    handleMobileOverlay();
+  }
 });
