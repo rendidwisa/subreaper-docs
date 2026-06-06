@@ -160,21 +160,31 @@ SubReaper will launch an interactive setup wizard and prompt for a MaxMind licen
 
 ---
 
+## Update WAF IP Ranges
+
+```bash
+subreaper -U
+```
+CDN providers frequently change their IP ranges. Run -U periodically to download the latest IP prefixes from official sources (CloudFront, Cloudflare, Fastly). The updated data is stored in ~/.subreaper/waf_ranges.json and used automatically on subsequent scans.
+
+---
+
 ## Full Options
 
-| Option               | Short | Description                               |
-| -------------------- | ----- | ----------------------------------------- |
-| `--domain`           | `-d`  | Scan a single domain or subdomain         |
-| `--file`             | `-f`  | File containing one domain per line       |
-| `--output`           | `-o`  | Export results to a JSON file             |
-| `--concurrency`      | `-c`  | Number of parallel scan workers           |
-| `--timeout`          | `-t`  | DNS and HTTP timeout in seconds           |
-| `--nameservers`      | `-n`  | Comma-separated custom DNS resolvers      |
-| `--verbose`          | `-v`  | Display all domain statuses               |
-| `--origin`           | `-i`  | Discover exposed origin IPs               |
-| `--validate-origins` | `-Vo` | Validate discovered origin IPs            |
-| `--ghost`            | `-g`  | Detect ghost services and foreign content |
-| `--setup-geoip`      | `-S`  | Download MaxMind GeoLite2 databases       |
+| Option               | Short | Description                                            |
+| -------------------- | ----- | ------------------------------------------------------ |
+| `--domain`           | `-d`  | Scan a single domain or subdomain                      |
+| `--file`             | `-f`  | File containing one domain per line                    |
+| `--output`           | `-o`  | Export results to a JSON file                          |
+| `--concurrency`      | `-c`  | Number of parallel scan workers                        |
+| `--timeout`          | `-t`  | DNS and HTTP timeout in seconds                        |
+| `--nameservers`      | `-n`  | Comma-separated custom DNS resolvers                   |
+| `--verbose`          | `-v`  | Display all domain statuses                            |
+| `--origin`           | `-i`  | Discover exposed origin IPs                            |
+| `--validate-origins` | `-Vo` | Validate discovered origin IPs                         |
+| `--ghost`            | `-g`  | Detect ghost services and foreign content              |
+| `--setup-geoip`      | `-S`  | Download MaxMind GeoLite2 databases                    |
+| `--update-waf-db`    | `-U`  | Download latest WAF/CDN IP ranges from official sources|  
 
 ---
 

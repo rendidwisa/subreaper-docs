@@ -28,6 +28,9 @@ Resolve ASN, organization, country, city, and geographic coordinates using MaxMi
 
 Automatically handle common validation issues such as Cloudflare protection layers and Vercel SNI mismatches.
 
+## Auto-Update Database
+Downloads the latest IP ranges from official sources (CloudFront, Cloudflare, Fastly) via `-U`
+
 ## Concurrent Scanning
 
 Perform large-scale scans efficiently with asynchronous workers and configurable concurrency limits.
