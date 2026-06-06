@@ -43,6 +43,6 @@ source subreaper/bin/activate
 ```
 
 ```bash
-pip install
+pip install .
 
 ```
