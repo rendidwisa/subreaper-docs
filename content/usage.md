@@ -104,13 +104,13 @@ Multiple resolvers can be supplied as a comma-separated list.
 
 ## Origin IP Discovery
 
-Attempt to identify exposed origin servers behind CDNs and WAFs.
+Identify exposed origin servers behind CDNs and WAFs.
 
 ```bash
 subreaper -f subdomains.txt -i
 ```
 
-This feature can help uncover infrastructure that is directly reachable even when the public hostname is protected by a reverse proxy.
+This flag enables collection of candidate origin IPs. For domains with a recognised WAF, results are displayed immediately. For domains **without** a WAF, combine with `-Vo` to validate and surface directly reachable IPs.
 
 ---
 
@@ -122,7 +122,7 @@ Validate discovered origin IPs using direct HTTP requests.
 subreaper -f subdomains.txt -i -Vo
 ```
 
-This performs additional verification and may improve result accuracy, but increases scan time.
+Performs HTTP probes against each candidate IP. It **significantly reduces false positives** and **enables detection of exposed IPs on domains that do not use a WAF** (displayed as "No WAF"). Increases accuracy at the cost of scan time.
 
 ---
 
