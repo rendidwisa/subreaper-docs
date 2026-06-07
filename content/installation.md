@@ -46,3 +46,6 @@ source subreaper/bin/activate
 pip install .
 
 ```
+
+---
+[Welcome](#welcome) · [Usage](#usage) · [Features](#features) · [Contributing](#contributing) · [License](#license) 

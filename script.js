@@ -56,7 +56,6 @@ function buildTableOfContents() {
   const tocNav = document.getElementById('tocNav');
   if (!tocNav) return;
 
-  // Ambil semua heading h2 dan h3 di konten
   const headings = contentDiv.querySelectorAll('h2, h3');
   tocNav.innerHTML = '';
 
@@ -66,7 +65,6 @@ function buildTableOfContents() {
   }
 
   headings.forEach((heading, index) => {
-    // Buat ID unik jika belum ada
     if (!heading.id) {
       heading.id = `heading-${index}-${Math.random().toString(36).substr(2, 5)}`;
     }
@@ -76,14 +74,12 @@ function buildTableOfContents() {
     link.textContent = heading.textContent;
     link.classList.add(heading.tagName.toLowerCase() === 'h3' ? 'toc-h3' : 'toc-h2');
 
-    // Scroll halus saat diklik
     link.addEventListener('click', (e) => {
       e.preventDefault();
       document.querySelector(link.getAttribute('href'))?.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
-      // Update active state
       document.querySelectorAll('.toc-nav a').forEach(a => a.classList.remove('active'));
       link.classList.add('active');
     });
@@ -91,7 +87,6 @@ function buildTableOfContents() {
     tocNav.appendChild(link);
   });
 
-  // Intersection Observer untuk menyorot link yang sedang terlihat
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       const id = entry.target.id;
@@ -106,7 +101,12 @@ function buildTableOfContents() {
   headings.forEach(h => observer.observe(h));
 }
 
+// Global state untuk mencegah infinite loop saat update hash otomatis
+let isInternalLoading = false;
+
 async function loadPage(page) {
+  if (isInternalLoading) return;
+  
   const contentDiv = document.getElementById('content');
   contentDiv.innerHTML = '<div class="loading">Loading…</div>';
 
@@ -117,20 +117,19 @@ async function loadPage(page) {
     contentDiv.innerHTML = marked.parse(markdown);
     addCopyButtons();
 
-    // Highlight navigasi kiri
     document.querySelectorAll('.nav-link').forEach(link => {
       link.classList.remove('active');
       if (link.dataset.page === page) link.classList.add('active');
     });
 
-    // Update hash
+    // Amankan perubahan hash agar tidak menembak listener secara redundan
+    isInternalLoading = true;
     window.location.hash = page;
+    setTimeout(() => { isInternalLoading = false; }, 50);
 
-    // Bangun ToC di sidebar kanan
     buildTableOfContents();
   } catch (err) {
     contentDiv.innerHTML = '<h1>404</h1><p>Page not found.</p>';
-    // Kosongkan ToC
     const tocNav = document.getElementById('tocNav');
     if (tocNav) tocNav.innerHTML = '';
   }
@@ -157,17 +156,28 @@ function addCopyButtons() {
   });
 }
 
-// Inisialisasi halaman
-const initialPage = window.location.hash.slice(1) || 'welcome';
-loadPage(initialPage);
+// ==========================================
+// 3. Centralized Routing Engine (Perbaikan Utama)
+// ==========================================
 
-// Navigasi kiri
+// Fungsi tunggal untuk membaca rute dari URL hash saat ini
+function router() {
+  const currentHash = window.location.hash.slice(1) || 'welcome';
+  loadPage(currentHash);
+}
+
+// Pantau perubahan hash secara realtime (klik tautan internal .md maupun navigasi luar)
+window.addEventListener('hashchange', router);
+
+// Inisialisasi halaman pertama kali saat web dibuka
+document.addEventListener('DOMContentLoaded', router);
+
+// Handler untuk Navigasi Kiri (Sidebar)
 document.querySelector('.nav').addEventListener('click', (e) => {
-  e.preventDefault();
   const link = e.target.closest('.nav-link');
   if (!link) return;
+  
   const page = link.dataset.page;
-  loadPage(page);
 
   if (window.innerWidth <= 768) {
     layout.classList.add('sidebar-closed');

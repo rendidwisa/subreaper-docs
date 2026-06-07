@@ -42,3 +42,7 @@ Generate readable terminal output and structured JSON reports suitable for bug b
 ## Precision-Focused Detection
 
 Reduce false positives through multi-resolver consensus checks, wildcard detection, and negative-signal filtering.
+
+---
+
+[Welcome](#welcome) · [Installation](#installation) · [Usage](#usage) · [Contributing](#contributing) · [License](#license) 

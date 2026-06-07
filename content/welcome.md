@@ -13,4 +13,5 @@ Built for bug bounty hunters and pentesters with a precision-focused detection d
 - Professional output: colored terminal, verbose DNS details, JSON export
 - Multi-resolver consensus, wildcard guard, and negative signal filtering to minimize false positives
 
-[Installation](installation) · [Usage](usage) · [Features](features)
+---
+[Installation](#installation) · [Usage](#usage) · [Features](#features) · [Contributing](#contributing) · [License](#license) 

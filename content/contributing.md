@@ -119,3 +119,6 @@ If you find a bug, please open an issue with:
 ---
 
 Thank you for helping make SubReaper better!
+
+---
+[Welcome](#welcome) · [Installation](#installation) · [Usage](#usage) · [Features](#features) · [License](#license) 

@@ -219,3 +219,6 @@ subreaper -f subdomains.txt -i -Vo
 ```bash
 subfinder -d target.com -silent | subreaper -f /dev/stdin -i -Vo -g -o results.json
 ```
+
+---
+[Welcome](#welcome) · [Installation](#installation) · [Features](#features) · [Contributing](#contributing) · [License](#license) 
