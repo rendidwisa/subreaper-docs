@@ -1,53 +1,77 @@
-## Development Roadmap
+# SubReaper — Development Roadmap
 
-SubReaper continues to evolve beyond DNS takeover detection. The following features are planned to enhance its capability in identifying network and DNS misconfigurations commonly accepted in bug bounty programs.
-
----
-
-### Email Security Analysis (SPF / DMARC / DKIM)
-
-Analyze TXT records to detect weak email authentication configurations that allow domain spoofing.  
-**Technique:** Parse SPF mechanisms, query DMARC and DKIM records.  
-**Data used:** DNS TXT records already collected during scanning.  
-**Impact:** High – email spoofing reports are consistently accepted across bug bounty platforms.  
-**Status:** Planned.
+SubReaper evolves beyond subdomain takeover detection. The following features are
+designed to broaden the scope of findings consistently accepted across bug bounty programs.
 
 ---
 
-### Origin IP Open Port Detection
+## In Development
 
-Perform lightweight TCP port scans on candidate origin IPs discovered by the WAF bypass module.  
-**Technique:** Concurrent TCP connect to common ports (21, 22, 3306, 6379, 8080, etc.).  
-**Data used:** Candidate origin IPs from the `-i` (WAF bypass) feature.  
-**Impact:** High – exposed databases or SSH can lead to remote code execution.  
-**Status:** Planned.
+**Email Security Analysis** `-E`
 
----
-
-### Open Redirect Detection
-
-Identify open redirect vulnerabilities by probing subdomains with common redirect parameters.  
-**Technique:** HTTP requests with parameters like `?redirect=`, `?url=`, `?next=`; inspect the `Location` header.  
-**Data used:** Subdomain list and HTTP responses.  
-**Impact:** Moderate to high – open redirects are frequently accepted in bounty programs and easy to exploit.  
-**Status:** Planned.
+Analyzes SPF, DMARC, and DKIM configurations to detect domain spoofing weaknesses.
+Processes TXT records already collected during scanning — no additional DNS overhead.
+Technique: parses SPF mechanisms, queries DMARC and DKIM, identifies misconfigurations
+such as `+all`, missing DMARC policy, and weak DKIM keys.
 
 ---
 
-### Zone Transfer (AXFR) Exposure
+**Stale DNS Record Detection** `-St`
 
-Check if nameservers permit unauthorized zone transfers, potentially exposing the entire DNS zone.  
-**Technique:** Attempt AXFR query against each NS record with a short timeout.  
-**Data used:** NS records from DNS analysis.  
-**Impact:** Critical – full zone exposure, though rarely found.  
-**Status:** Planned (optional feature).
+Detects DNS records pointing to decommissioned services — zombie A records,
+MX records for dead mail servers, and leftover TXT verification records.
+Correlates DNS resolution with HTTP probing to confirm active status.
 
 ---
 
-### CORS Misconfiguration Detection
+**CORS Misconfiguration Chain** `-Co`
 
-Detect overly permissive Cross-Origin Resource Sharing policies that could be exploited.  
-**Technique:** Send requests with a custom `Origin` header; verify if the response reflects the origin or returns `*`.  
-**Data used:** HTTP response headers.  
-**Impact:** Moderate – frequently sought after, though exploitability depends on context.  
-**Status:** Planned.
+Detects CORS policies that reflect arbitrary origins, chained with dangling or
+vulnerable subdomains. Requires file input `-f`.
+Reports credential exposure when `Access-Control-Allow-Credentials: true` is present.
+
+---
+
+**DNSSEC & Zone Transfer Analysis** `-Ds`
+
+Three checks in one: DNSSEC algorithm strength (with CVE references where applicable),
+NSEC zone walking for zone content enumeration, and AXFR attempts against every
+authoritative nameserver. Full zone dump included in output if transfer succeeds.
+
+---
+
+## Under Active Development
+
+**DNS Sinkhole Detection** `-Sk`
+
+Detects domains redirected to sinkhole or parked infrastructure.
+Fingerprints providers from response body and headers.
+Module scaffolded; not yet functional. The `-Sk` flag is available but inactive.
+
+---
+
+## Planned
+
+**Origin IP Port Scan**
+
+Lightweight TCP probe against candidate origin IPs discovered by the WAF bypass module `-i`.
+Targets commonly exposed services: SSH, database ports, management interfaces.
+Impact: high — exposed databases or SSH can lead to remote code execution.
+
+---
+
+**Open Redirect Detection**
+
+Probes subdomains with common redirect parameters (`redirect`, `url`, `next`, `return`).
+Inspects the `Location` header for off-domain targets.
+Impact: moderate to high — consistently accepted on bug bounty platforms.
+
+---
+
+## Status Reference
+
+| Status | Description |
+|--------|-------------|
+| In Development | Implementation in progress, available in the current version |
+| Under Active Development | Module scaffolded, partially functional |
+| Planned | Designed, not yet started |
