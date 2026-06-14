@@ -12,7 +12,11 @@ Built for bug bounty hunters and pentesters with a precision-focused detection d
 - Blazing-fast async scanning with configurable concurrency
 - Professional output: colored terminal, verbose DNS details, JSON export
 - Multi-resolver consensus, wildcard guard, and negative signal filtering to minimize false positives
-- Email security auditing (SPF, DMARC, DKIM) — *in development*
+- **Email Security Checks** – SPF, DMARC, DKIM misconfiguration detection
+- **Stale DNS Detection** – Zombie A, MX, and dangling TXT verification records
+- **CORS Misconfiguration Chaining** – Exploit CORS weaknesses with vulnerable/dangling subdomains
+- **DNSSEC Analysis** – DNSSEC misconfig, NSEC zone walking, AXFR zone transfers
+- **Sinkhole & Hijack Detection** – DNS sinkhole identification and default credential hijacking
 
 ---
-[Installation](#installation) · [Usage](#usage) · [Features](#features) · [Contributing](#contributing) · [License](#license) · [Roadmap](#roadmap) 
+[Installation](#installation) · [Usage](#usage) · [Features](#features) · [Contributing](#contributing) · [License](#license) · [Roadmap](#roadmap)

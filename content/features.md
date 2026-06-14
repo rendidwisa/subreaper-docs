@@ -20,6 +20,26 @@ Validate discovered origin IPs with direct HTTP requests to confirm exposure and
 
 Detect active third-party services still referenced by DNS records but serving unrelated content, abandoned projects, or foreign websites.
 
+## Email Security Checks
+
+Audit SPF, DMARC, and DKIM configurations. Identify missing records, permissive policies (`+all`, `p=none`), and absent DKIM selectors that weaken email security posture.
+
+## Stale DNS Detection
+
+Find dangling DNS records pointing to expired resources, including zombie A records, defunct MX servers, and leftover TXT verification tokens (e.g., Google, Microsoft) that signal abandoned cloud services.
+
+## CORS Misconfiguration Chaining
+
+Check for overly permissive CORS headers (`Access-Control-Allow-Origin: *` or dynamic reflection) and chain them with vulnerable or dangling subdomains to highlight potential data exfiltration paths.
+
+## DNSSEC Analysis
+
+Examine DNSSEC deployment health, detect misconfigurations, perform NSEC zone walking to enumerate zone records, and probe for open AXFR zone transfers that could leak entire zone contents.
+
+## Sinkhole & Hijack Detection
+
+Identify DNS sinkholes and placeholder parking pages. When combined with aggressive mode, probes open ports and attempts default credential login on discovered services.
+
 ## IP Intelligence
 
 Resolve ASN, organization, country, city, and geographic coordinates using MaxMind GeoLite2 databases or DNS-based fallback methods.

@@ -138,12 +138,84 @@ This can help identify abandoned integrations, forgotten third-party services, o
 
 ---
 
+## Email Security Checks
+
+Audit SPF, DMARC, and DKIM configurations for the apex domain.
+
+```bash
+subreaper -d example.com -E
+```
+
+Flags missing records, overly permissive SPF (+all), p=none DMARC policies, and absent DKIM selectors. Useful for quick email security posture assessment.
+
+---
+
+## Stale DNS Detection
+
+Identify dangling DNS records that point to expired or non-existent resources.
+
+```bash
+subreaper -f subs.txt -St
+```
+
+Detects zombie A records, defunct MX servers, and leftover TXT verification tokens (e.g., Google, Microsoft) that may indicate abandoned cloud services.
+
+---
+
+## CORS Misconfiguration Chaining
+
+Check for permissive CORS headers that can be exploited via vulnerable or dangling subdomains.
+
+```bash
+subreaper -f subs.txt -Co
+```
+
+Requires a file input (-f). Combines subdomain takeover context with CORS misconfigurations to highlight potential data exfiltration paths.
+
+---
+
+## DNSSEC Analysis
+
+Examine DNSSEC deployment and attempt zone enumeration.
+
+```bash
+subreaper -d example.com -Ds
+```
+
+Checks for DNSSEC validation errors, performs NSEC zone walking to enumerate all zone records, and probes for open AXFR zone transfers.
+
+---
+
+## Sinkhole Detection
+
+Find domains that resolve to sinkhole servers or placeholder parking pages.
+
+```bash
+subreaper -f suspicious.txt -Sk
+```
+
+Looks for DNS sinkhole patterns. When combined with -A, attempts default credential login on discovered services.
+
+---
+
+## Aggressive Sinkhole Hijack
+
+Attempt default credential login on sinkholed services.
+
+```bash
+subreaper -f suspicious.txt -Sk -A
+```
+
+Probes open ports (SSH, FTP, HTTP basic auth) and tries known default credentials. Use only on assets you own or have explicit permission to test.
+
+---
+
 ## Combine Multiple Detection Modes
 
 Run takeover detection, origin discovery, origin validation, and ghost service analysis together.
 
 ```bash
-subfinder -d target.com -silent | subreaper -f /dev/stdin -i -Vo -g -o results.json
+subfinder -d target.com -silent | subreaper -f /dev/stdin -i -Vo -g -E -o results.json
 ```
 
 ---
@@ -184,7 +256,14 @@ CDN providers frequently change their IP ranges. Run -U periodically to download
 | `--validate-origins` | `-Vo` | Validate discovered origin IPs                         |
 | `--ghost`            | `-g`  | Detect ghost services and foreign content              |
 | `--setup-geoip`      | `-S`  | Download MaxMind GeoLite2 databases                    |
-| `--update-waf-db`    | `-U`  | Download latest WAF/CDN IP ranges from official sources|  
+| `--update-waf-db`    | `-U`  | Download latest WAF/CDN IP ranges from official sources| 
+| `--email-security` | `-E`  | Check SPF, DMARC, and DKIM misconfigurations                    |
+| `--stale-dns`      | `-St` | Detect stale DNS records (zombie A, MX, TXT verification)       |
+| `--cors-chain`     | `-Co` | CORS misconfig chained with dangling/vulnerable subdomains (needs -f) |
+| `--dnssec`         | `-Ds` | Check DNSSEC misconfig, NSEC walking, and attempt AXFR          |
+| `--sinkhole`       | `-Sk` | Detect DNS sinkholes & attempt service hijack with default creds|
+| `--aggressive`     | `-A`  | Probes ports & tries default logins on sinkholes (requires -Sk) |
+
 
 ---
 
@@ -214,10 +293,34 @@ subreaper -f subdomains.txt -o results.json
 subreaper -f subdomains.txt -i -Vo
 ```
 
+### Email security audit
+
+```bash
+subreaper -d example.com -E
+```
+
+### Stale DNS enumeration
+
+```bash
+subreaper -f subdomains.txt -St
+```
+
+### DNSSEC and zone transfer probe
+
+```bash
+subreaper -d example.com -Ds
+```
+
+### Sinkhole detection with aggressive takeover
+
+```bash
+subreaper -f suspicious.txt -Sk -A
+```
+
 ### Full assessment
 
 ```bash
-subfinder -d target.com -silent | subreaper -f /dev/stdin -i -Vo -g -o results.json
+subfinder -d target.com -silent | subreaper -f /dev/stdin -i -Vo -g -E -St -Co -Ds -Sk -o results.json
 ```
 
 ---
